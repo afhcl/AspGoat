@@ -18,8 +18,7 @@
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
 
-    // Vulnerable as raw HTML output from the AI response is being reflected
-    bubble.innerHTML = text;
+    bubble.innerHTML = escapeHtml(text);
     wrap.appendChild(bubble);
     chatEl.appendChild(wrap);
     chatEl.scrollTop = chatEl.scrollHeight;
@@ -77,17 +76,6 @@
         addMessage('assistant', (data && data.error) ? data.error : `Error ${res.status}`);
       } else {
         addMessage('assistant', (data && data.reply) ? data.reply : '');
-                
-        // Vulnerable as the response from the AI Chatbot is executed via the eval function
-        try
-        {
-            eval(data.reply);
-        }
-        catch(e)
-        {
-            console.log(e);
-        }
-
       }
     } catch (e) {
       hideTyping(typingEl);
